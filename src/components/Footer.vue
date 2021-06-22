@@ -3,8 +3,8 @@
     <div class="d-flex flex-row justify-content-around">
       <div class="navFooter">
         <ul class="d-flex flex-row flex-wrap">
-          <li><router-link to="/Farmacia">Farmacia</router-link></li>
-          <li><router-link to="/Juguetes">Juguetes</router-link></li>
+          <li><router-link to="/Productos/Farmacia">Farmacia</router-link></li>
+          <li><router-link to="/Productos/Juguetes">Juguetes</router-link></li>
           <li><router-link to="/Contacto">Contacto</router-link></li>
         </ul>
       </div>

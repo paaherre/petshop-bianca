@@ -1,14 +1,18 @@
 <template>
   <div class="farmacia">
-    <h1>Farmacia</h1>
-    <div class="wrapper">
+    <h2>{{ $route.params.tipo }}</h2>
+    <div
+      v-for="producto in productosPorTipo"
+      :key="producto._id"
+      class="wrapper"
+    >
       <div class="container">
         <div class="top"></div>
         <div class="bottom" :class="buy ? ' clicked' : ''">
           <div class="left">
             <div class="details">
-              <h1>Chair</h1>
-              <p>£250</p>
+              <h1>{{ producto.nombre }}</h1>
+              <p>&dollar;{{ producto.precio }}</p>
             </div>
             <div @click="click" class="buy">
               <i class="material-icons fa fa-cart-plus"></i>
@@ -19,7 +23,7 @@
               <i class="material-icons fa fa-check"></i>
             </div>
             <div class="details">
-              <h1>Chair</h1>
+              <h1>{{ producto.name }}</h1>
               <p>Added to your cart</p>
             </div>
             <div class="remove">
@@ -32,7 +36,9 @@
         <div class="icon">
           <i class="material-icons fa fa-info"></i>
         </div>
-        <div class="contents"></div>
+        <div class="contents">
+          <p>{{ producto.descripcion }}</p>
+        </div>
       </div>
     </div>
   </div>
@@ -50,20 +56,28 @@ export default {
       this.buy = !this.buy;
     },
   },
+  data() {
+    return {
+      todosLosProductos: [],
+    };
+  },
+  mounted() {
+    fetch("https://apipetshop.herokuapp.com/api/articulos")
+      .then((res) => res.json())
+      .then((json) => {
+        this.todosLosProductos = json.response;
+      });
+  },
+  computed: {
+    productosPorTipo() {
+      let tipoProducto =
+        this.$route.params.tipo === "Farmacia" ? "Medicamento" : "Juguete";
+      return this.todosLosProductos.filter(
+        (producto) => producto.tipo === tipoProducto
+      );
+    },
+  },
 };
-/* let buy = document.querySelector(".buy");
-let bottom = document.querySelector(".bottom");
-let remove = document.querySelector(".remove");
-
-buy.addEventListener("click", () => {
-  bottom.classList.add("clicked");
-});
-
-remove.addEventListener("click", () =>  {
-  if (bottom.classList.contains("clicked")) {
-    bottom.classList.remove("clicked");
-  }
-}); */
 </script>
 
 <style>
