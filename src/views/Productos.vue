@@ -1,51 +1,53 @@
 <template>
   <div class="farmacia">
     <h2>{{ $route.params.tipo }}</h2>
-    <div
-      v-for="producto in productosPorTipo"
-      :key="producto._id"
-      class="wrapper"
-    >
-      <div class="container">
-        <div class="top"></div>
-        <div class="bottom" :class="buy ? ' clicked' : ''">
-          <div class="left">
-            <div class="details">
-              <h1>{{ producto.nombre }}</h1>
-              <p>&dollar;{{ producto.precio }}</p>
-            </div>
-            <div @click="click" class="buy">
-              <i class="material-icons fa fa-cart-plus"></i>
-            </div>
-          </div>
-          <div class="right">
-            <div class="done">
-              <i class="material-icons fa fa-check"></i>
-            </div>
-            <div class="details">
-              <h1>{{ producto.name }}</h1>
-              <p>Added to your cart</p>
-            </div>
-            <div class="remove">
-              <i @click="click" class="material-icons fa fa-times"></i>
+
+    <div class="d-flex flex-row flex-wrap">
+      <div
+        v-for="producto in productosPorTipo"
+        :key="producto._id"
+        class="wrapper d-flex flex-row mx-auto"
+      >
+        <div
+          class="left"
+          :style="{ 'background-image': 'url(' + producto.imagen + ')' }"
+        >
+          <div class="d-flex flex-column align-self">
+            <p class="badge bg-success precio">
+              &dollar;{{ producto.precio.toFixed(2) }}
+            </p>
+            <div
+              class="stock badge bg-danger align-self-baseline"
+              v-show="producto.stock <= 5"
+            >
+              <span>Ultimas Unidades</span>
             </div>
           </div>
         </div>
-      </div>
-      <div class="inside">
-        <div class="icon">
-          <i class="material-icons fa fa-info"></i>
-        </div>
-        <div class="contents">
-          <p>{{ producto.descripcion }}</p>
+        <div class="rigth">
+          <div class="cardNombre">
+            <h5>{{ producto.nombre }}</h5>
+          </div>
+          <div class="desc">
+            <p>{{ producto.descripcion }}</p>
+          </div>
+          <Contador :producto="producto" :key="producto._id" />
         </div>
       </div>
     </div>
   </div>
+  <i @click="click" class="material-icons fa fa-cart-plus"></i>
+  <i class="material-icons fa fa-check"></i>
+  <i class="material-icons fa fa-info"></i>
+  <i @click="click" class="material-icons fa fa-times"></i>
 </template>
 
 <script>
+import Contador from "@/components/Contador.vue";
 export default {
+  components: {
+    Contador,
+  },
   data() {
     return {
       buy: false,
@@ -80,190 +82,55 @@ export default {
 };
 </script>
 
-<style>
-* {
-  box-sizing: unset !important;
+<style scoped>
+.wrapper {
+  width: 40vw;
+  height: 40vh;
+  border: 2px solid black;
+  border-radius: 5px;
+  margin: 1rem;
 }
-.farmacia {
-  min-height: 65vh;
+.left {
+  width: 50%;
+  height: 100%;
+  border-right: 1px solid rgba(0, 0, 0, 0.3);
+  /* object-fit: contain; // se utiliza para posicionar la imagen no el background */
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+.precio {
+  font-size: 20px;
+}
+.rigth {
+  width: 50%;
+  height: 100%;
+  padding: 0.5rem;
+}
+.rigth .cardNombre {
+  height: 20%;
+}
+.rigth .desc {
+  height: 35%;
+  overflow: auto;
+}
+@media only screen and (min-width: 375px) and (max-width: 1000px) {
+  .wrapper {
+    width: 80vw;
+    font-size: 14px;
+  }
+  .wrapper h5 {
+    font-size: 16px;
+  }
 }
 
-.wrapper {
-  width: 300px;
-  height: 500px;
-  background: white;
-  margin: auto;
-  position: relative;
-  overflow: hidden;
-  border-radius: 10px 10px 10px 10px;
-  box-shadow: 0;
-  transform: scale(0.95);
-  transition: box-shadow 0.5s, transform 0.5s;
-}
-.wrapper:hover {
-  transform: scale(1);
-  box-shadow: 5px 20px 30px rgba(0, 0, 0, 0.2);
-}
-.wrapper .container {
-  width: 100%;
-  height: 100%;
-}
-.wrapper .container .top {
-  height: 80%;
-  width: 100%;
-  background: url(https://s-media-cache-ak0.pinimg.com/736x/49/80/6f/49806f3f1c7483093855ebca1b8ae2c4.jpg)
-    no-repeat center center;
-  -webkit-background-size: 100%;
-  -moz-background-size: 100%;
-  -o-background-size: 100%;
-  background-size: 100%;
-}
-.wrapper .container .bottom {
-  width: 200%;
-  height: 20%;
-  transition: transform 0.5s;
-}
-.wrapper .container .bottom.clicked {
-  transform: translateX(-50%);
-}
-.wrapper .container .bottom h1 {
-  margin: 0;
-  padding: 0;
-}
-.wrapper .container .bottom p {
-  margin: 0;
-  padding: 0;
-}
-.wrapper .container .bottom .left {
-  height: 100%;
-  width: 50%;
-  background: #f4f4f4;
-  position: relative;
-  float: left;
-}
-.wrapper .container .bottom .left .details {
-  float: left;
-  width: calc(70% - 40px);
-}
-.wrapper .container .bottom .left .buy {
-  float: right;
-  width: calc(30% - 2px);
-  height: 100%;
-  background: #f1f1f1;
-  transition: background 0.5s;
-  border-left: solid thin rgba(0, 0, 0, 0.1);
-}
-.wrapper .container .bottom .left .buy i {
-  font-size: 30px;
-  padding: 30px;
-  color: #254053;
-  transition: transform 0.5s;
-}
-.wrapper .container .bottom .left .buy:hover {
-  background: #a6cdde;
-}
-.wrapper .container .bottom .left .buy:hover i {
-  transform: translateY(5px);
-  color: #00394b;
-}
-.wrapper .container .bottom .right {
-  width: 50%;
-  background: #a6cdde;
-  color: white;
-  float: right;
-  height: 200%;
-  overflow: hidden;
-}
-.wrapper .container .bottom .right .details {
-  padding: 20px;
-  float: right;
-  width: calc(70% - 40px);
-}
-.wrapper .container .bottom .right .done {
-  width: calc(30% - 2px);
-  float: left;
-  transition: transform 0.5s;
-  border-right: solid thin rgba(255, 255, 255, 0.3);
-  height: 50%;
-}
-.wrapper .container .bottom .right .done i {
-  font-size: 30px;
-  padding: 30px;
-  color: white;
-}
-.wrapper .container .bottom .right .remove {
-  width: calc(30% - 1px);
-  clear: both;
-  border-right: solid thin rgba(255, 255, 255, 0.3);
-  height: 50%;
-  background: #bc3b59;
-  transition: transform 0.5s, background 0.5s;
-}
-.wrapper .container .bottom .right .remove:hover {
-  background: #9b2847;
-}
-.wrapper .container .bottom .right .remove:hover i {
-  transform: translateY(5px);
-}
-.wrapper .container .bottom .right .remove i {
-  transition: transform 0.5s;
-  font-size: 30px;
-  padding: 30px;
-  color: white;
-}
-.wrapper .container .bottom .right:hover .remove,
-.wrapper .container .bottom .right:hover .done {
-  transform: translateY(-100%);
-}
-.wrapper .inside {
-  z-index: 9;
-  background: #92879b;
-  width: 140px;
-  height: 140px;
-  position: absolute;
-  top: -70px;
-  right: -70px;
-  border-radius: 0px 0px 200px 200px;
-  transition: all 0.5s, border-radius 2s, top 1s;
-  overflow: hidden;
-}
-.wrapper .inside .icon {
-  position: absolute;
-  right: 85px;
-  top: 85px;
-  color: white;
-  opacity: 1;
-}
-.wrapper .inside:hover {
-  width: 100%;
-  right: 0;
-  top: 0;
-  border-radius: 0;
-  height: 80%;
-}
-.wrapper .inside:hover .icon {
-  opacity: 0;
-  right: 15px;
-  top: 15px;
-}
-.wrapper .inside:hover .contents {
-  opacity: 1;
-  transform: scale(1);
-  transform: translateY(0);
-}
-.wrapper .inside .contents {
-  padding: 5%;
-  opacity: 0;
-  transform: scale(0.5);
-  transform: translateY(-200%);
-  transition: opacity 0.2s, transform 0.8s;
-}
-.wrapper .inside .contents h1,
-.wrapper .inside .contents p,
-.wrapper .inside .contents table {
-  color: white;
-}
-.wrapper .inside .contents p {
-  font-size: 13px;
+@media only screen and (max-width: 375px) {
+  .wrapper {
+    width: 80vw;
+    font-size: 10px;
+  }
+  .wrapper h5 {
+    font-size: 12px;
+  }
 }
 </style>

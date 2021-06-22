@@ -8,10 +8,10 @@
     </div>
     <div class="nav d-flex flex-row justify-content-between mx-auto flex-wrap">
       <router-link to="/">Inicio <span> | </span></router-link>
-      <router-link to="Productos/Farmacia"
+      <router-link to="/Productos/Farmacia"
         >Farmacia <span> | </span>
       </router-link>
-      <router-link to="Productos/Juguetes"
+      <router-link to="/Productos/Juguetes"
         >Juguetes <span> | </span>
       </router-link>
       <router-link to="/Contacto">Contacto</router-link>
